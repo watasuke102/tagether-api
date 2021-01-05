@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: application/json; charset=UTF-8');
-
 # Function
 function error($mes) {
   http_response_code(400);
@@ -9,11 +7,27 @@ function error($mes) {
   exit(1);
 }
 
+header('Content-Type: application/json; charset=UTF-8');
+$mysqli = new mysqli('localhost', 'root', '', 'tagether');
+if (mysqli_connect_error()) {
+  error($mysqli->connect_error);
+}
+
 # POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $query   = 'INSERT INTO exam (title, description, tag, list) values ';
+  var_dump(file_get_contents('php://input'));
   $request = json_decode(file_get_contents('php://input'), true);
-  echo $request[0]['id'] . ' ';
-  echo $request[1]['id'] . ' ';
+  if (is_null($request)) {
+    error('json parse failed');
+  }
+  $list    = str_replace('"', '\\"', $request['list']);
+  $query  .= '(' .
+    '"' . $request['title'] . '",' .
+    '"' . $request['desc']  . '",' .
+    '"' . $request['tag']   . '",' .
+    '"' . $list             . '")' ;
+  $result = $mysqli->query($query);
   http_response_code(200);
   $array['status'] = 'ok';
   print json_encode($array);
@@ -22,11 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 # GET
 else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  $mysqli = new mysqli('localhost', 'root', '', 'tagether');
-  if (mysqli_connect_error()) {
-    error($mysqli->connect_error);
-  }
-
   $query = 'SELECT * FROM exam';
   if (isset($_GET['id'])) {
     if(!preg_match('/[^0-9]/', $_GET['id'])) {
@@ -49,7 +58,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $i++;
     }
     $result->close();
-    if ($array == null) {
+    if (is_null($array)) {
       error('id not found');
     } else {
       http_response_code(200);
