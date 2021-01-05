@@ -1,4 +1,11 @@
 <?php
+# API for TAGether
+#
+# CopyRight (c) 2020 Watasuke
+# Email  : <watasuke102@gmail.com>
+# Twitter: @Watasuke102
+# This software is released under the MIT SUSHI-WARE License.
+
 # Function
 function error($mes) {
   http_response_code(400);
