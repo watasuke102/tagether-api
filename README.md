@@ -1,6 +1,15 @@
 # API for TAGether
 
 以下URLを`http://localhost:8000`とします
+
+## 事前準備
+以下のようにデータベースを作成
+```
+$ CREATE DATABASE tagether;
+$ CREATE TABLE tagether.exam (id INT PRIMARY KEY AUTO_INCREMENT, updated_at TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, title TEXT, description TEXT, tag TEXT, list JSON);
+```
+ユーザー名やパラメータはまだ変えてない
+
 ## GET
 URLにidクエリを含めると、特定のidを取得できます  
 例: `http://localhost:8000?id=5`→`SELECT * FROM exam WHERE id=5`の結果が返ります  
