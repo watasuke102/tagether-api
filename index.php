@@ -5,7 +5,11 @@
 # Email  : <watasuke102@gmail.com>
 # Twitter: @Watasuke102
 # This software is released under the MIT SUSHI-WARE License.
+require_once __DIR__.'/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
+header('Content-Type: application/json; charset=UTF-8');
 # Function
 function error($mes) {
   http_response_code(400);
@@ -14,8 +18,7 @@ function error($mes) {
   exit(1);
 }
 
-header('Content-Type: application/json; charset=UTF-8');
-$mysqli = new mysqli('localhost', 'root', '', 'tagether');
+$mysqli = new mysqli('localhost', $_ENV['SQL_USER'], $_ENV['SQL_PASS'], 'tagether');
 if (mysqli_connect_error()) {
   error($mysqli->connect_error);
 }
