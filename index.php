@@ -1,5 +1,6 @@
 <?php
 # API for TAGether
+# index.php
 #
 # CopyRight (c) 2020 Watasuke
 # Email  : <watasuke102@gmail.com>
@@ -17,7 +18,8 @@ header('Access-Control-Allow-Origin: http://localhost:3000');
 # Function
 function error($mes) {
   http_response_code(400);
-  $array['error'] = $mes;
+  $array['status']  = 'error';
+  $array['message'] = $mes;
   print json_encode($array);
   exit(1);
 }
