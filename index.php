@@ -9,7 +9,11 @@ require_once __DIR__.'/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-header('Content-Type: application/json; charset=UTF-8');
+# headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Headers: Origin, Content-Type');
+header('Access-Control-Allow-Origin: http://localhost:3000');
+
 # Function
 function error($mes) {
   http_response_code(400);
@@ -26,7 +30,6 @@ if (mysqli_connect_error()) {
 # POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $query   = 'INSERT INTO exam (title, description, tag, list) values ';
-  var_dump(file_get_contents('php://input'));
   $request = json_decode(file_get_contents('php://input'), true);
   if (is_null($request)) {
     error('json parse failed');
