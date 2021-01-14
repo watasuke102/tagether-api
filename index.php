@@ -13,7 +13,8 @@ $dotenv->load();
 # headers
 header('Content-Type: application/json');
 header('Access-Control-Allow-Headers: Origin, Content-Type');
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Methods: POST, PUT, GET');
+header('Access-Control-Allow-Origin: https://tagether.watasuke.tk');
 
 # Function
 function error($mes) {
@@ -29,7 +30,8 @@ if (mysqli_connect_error()) {
   error($mysqli->connect_error);
 }
 
-# POST
+####################
+## POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $query   = 'INSERT INTO exam (title, description, tag, list) values ';
   $request = json_decode(file_get_contents('php://input'), true);
@@ -49,7 +51,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   return;
 }
 
-# GET
+####################
+## PUT
+else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+  $query   = 'UPDATE exam SET ';
+  $request = json_decode(file_get_contents('php://input'), true);
+  if (is_null($request)) {
+    error('json parse failed');
+  }
+  $list    = str_replace('"', '\\"', $request['list']);
+  $query  .=
+  'title="'       . $request['title'] . '",' .
+  'description="' . $request['desc']  . '",' .
+  'tag="'         . $request['tag']   . '",' .
+  'list="'        . $list             . '" ' .
+  'WHERE id='     . $request['id'];
+  $result = $mysqli->query($query);
+  http_response_code(200);
+  $array['status'] = 'ok';
+  print json_encode($array);
+  return;
+}
+
+####################
+## GET
 else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $query = 'SELECT * FROM exam';
   if (isset($_GET['id'])) {
