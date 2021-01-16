@@ -14,7 +14,7 @@ $dotenv->load();
 header('Content-Type: application/json');
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Access-Control-Allow-Methods: POST, PUT, GET');
-header('Access-Control-Allow-Origin: https://tagether.watasuke.tk');
+header('Access-Control-Allow-Origin: ' . $_ENV['ALLOW_ORIGIN']);
 
 # Function
 function error($mes) {
@@ -25,7 +25,7 @@ function error($mes) {
   exit(1);
 }
 
-$mysqli = new mysqli('localhost', $_ENV['SQL_USER'], $_ENV['SQL_PASS'], 'tagether');
+$mysqli = new mysqli('localhost', $_ENV['SQL_USER'], $_ENV['SQL_PASS'], $_ENV['SQL_DATABASE']);
 if (mysqli_connect_error()) {
   error($mysqli->connect_error);
 }
