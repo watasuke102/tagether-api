@@ -52,7 +52,7 @@ case 'POST':
   return;
 ####################
 ## PUT
-case '':
+case 'PUT':
   $query   = 'UPDATE exam SET ';
   $request = json_decode(file_get_contents('php://input'), true);
   if (is_null($request)) {
