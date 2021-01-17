@@ -25,6 +25,17 @@ function error($mes) {
   exit(1);
 }
 
+function error_check($mes) {
+  if ($mes) {
+    error($mes);
+  } else {
+    http_response_code(200);
+    $array['status'] = 'ok';
+    print json_encode($array);
+  }
+}
+
+
 $mysqli = new mysqli('localhost', $_ENV['SQL_USER'], $_ENV['SQL_PASS'], $_ENV['SQL_DATABASE']);
 if (mysqli_connect_error()) {
   error($mysqli->connect_error);
@@ -46,10 +57,9 @@ case 'POST':
     '"' . $request['tag']   . '",' .
     '"' . $list             . '")' ;
   $result = $mysqli->query($query);
-  http_response_code(200);
-  $array['status'] = 'ok';
-  print json_encode($array);
+  error_check($mysqli->error);
   return;
+
 ####################
 ## PUT
 case 'PUT':
@@ -66,9 +76,7 @@ case 'PUT':
   'list="'        . $list             . '" ' .
   'WHERE id='     . $request['id'];
   $result = $mysqli->query($query);
-  http_response_code(200);
-  $array['status'] = 'ok';
-  print json_encode($array);
+  error_check($mysqli->error);
   return;
 
 ####################
@@ -103,7 +111,7 @@ case 'GET':
       print json_encode($array);
     }
   } else {
-    error($mysqli->connect_error);
+    error($mysqli->error);
   }
   $mysqli->close();
   return;
@@ -113,8 +121,6 @@ case 'GET':
 case 'DELETE':
   $query = 'DELETE FROM exam WHERE id=' . $_GET['id'];
   $result = $mysqli->query($query);
-  http_response_code(200);
-  $array['status'] = 'ok';
-  print json_encode($array);
+  error_check($mysqli->error);
   return;
 }
