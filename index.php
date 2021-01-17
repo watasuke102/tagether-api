@@ -13,7 +13,7 @@ $dotenv->load();
 # headers
 header('Content-Type: application/json');
 header('Access-Control-Allow-Headers: Origin, Content-Type');
-header('Access-Control-Allow-Methods: POST, PUT, GET');
+header('Access-Control-Allow-Methods: POST, PUT, GET, DELETE');
 header('Access-Control-Allow-Origin: ' . $_ENV['ALLOW_ORIGIN']);
 
 # Function
@@ -32,7 +32,8 @@ if (mysqli_connect_error()) {
 
 ####################
 ## POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+switch ($_SERVER['REQUEST_METHOD']) {
+case 'POST':
   $query   = 'INSERT INTO exam (title, description, tag, list) values ';
   $request = json_decode(file_get_contents('php://input'), true);
   if (is_null($request)) {
@@ -49,11 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $array['status'] = 'ok';
   print json_encode($array);
   return;
-}
-
 ####################
 ## PUT
-else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+case '':
   $query   = 'UPDATE exam SET ';
   $request = json_decode(file_get_contents('php://input'), true);
   if (is_null($request)) {
@@ -71,11 +70,10 @@ else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
   $array['status'] = 'ok';
   print json_encode($array);
   return;
-}
 
 ####################
 ## GET
-else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+case 'GET':
   $query = 'SELECT * FROM exam';
   if (isset($_GET['id'])) {
     if(!preg_match('/[^0-9]/', $_GET['id'])) {
@@ -108,4 +106,15 @@ else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     error($mysqli->connect_error);
   }
   $mysqli->close();
+  return;
+
+####################
+## DELETE
+case 'DELETE':
+  $query = 'DELETE FROM exam WHERE id=' . $_GET['id'];
+  $result = $mysqli->query($query);
+  http_response_code(200);
+  $array['status'] = 'ok';
+  print json_encode($array);
+  return;
 }
