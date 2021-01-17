@@ -3,12 +3,25 @@
 以下URLを`http://localhost:8000`とします
 
 ## 事前準備
-以下のようにデータベースを作成
+以下のようにデータベースを作成 (データベース名はXXXとします)
 ```
-$ CREATE DATABASE tagether;
-$ CREATE TABLE tagether.exam (id INT PRIMARY KEY AUTO_INCREMENT, updated_at TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, title TEXT, description TEXT, tag TEXT, list JSON);
+$ CREATE DATABASE XXX;
+$ CREATE TABLE XXX.exam (id INT PRIMARY KEY AUTO_INCREMENT, updated_at TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, title TEXT, description TEXT, tag TEXT, list JSON);
 ```
-ユーザー名やパラメータはまだ変えてない
+index.phpと同じディレクトリに.envを作成し、以下のように記述
+```
+ALLOW_ORIGIN="リクエスト元のURL"
+SQL_USER="ユーザー名"
+SQL_PASS="SQLパスワード"
+SQL_DATABASE="XXX (データベース名)"
+```
+
+## 共通
+GET以外は以下のようなレスポンスが帰ってきます
+| Name    | Type   | Description                        |
+| ------- | ------ | ---------------------------------- |
+| status  | string | 'ok' or 'error'                    |
+| message | string | エラー発生時のみ、エラーメッセージ |
 
 ## GET
 URLにidクエリを含めると、特定のidを取得できます  
@@ -45,9 +58,21 @@ id及びupdated_atを含まないjsonを送信してください
 未実装です（常に`{"status":"ok"}`が返ってきます）
 ### 例 (curl)
 ```
-curl -X POST -H "Content-Type: application/json" "http://localhost:8000" -d '{"title": "TITLE","desc": "THIS IS DESCRIPTION","tag": "tag1,tag2","list": "[{\\"question\\": \\"1+1=?\\",\\"answer\\": \\"2\\"},{\\"question\\": \\"5+5=?\\",\\"answer\\": \\"10\\"}]"}'
+curl -X POST -H "Content-Type: application/json" "http://localhost:8000" -d '{"title": "TITLE","desc": "THIS IS DESCRIPTION","tag": "tag1,tag2","list": "[{\\"question\\": \\"1+1=?\\",\\"answer\\": [\\"2\\"]},{\\"question\\": \\"5+5=?\\",\\"answer\\": [\\"10\\"]}]"}'
 
 ↓
 
 {"status":"ok"}
 ```
+
+## DELETE
+消します
+### 例 (curl)
+```
+curl -X DELETE "http://localhost:8000?id=2"
+
+↓
+
+{"status":"ok"}
+```
+
