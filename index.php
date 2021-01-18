@@ -17,6 +17,10 @@ header('Access-Control-Allow-Methods: POST, PUT, GET, DELETE');
 header('Access-Control-Allow-Origin: ' . $_ENV['ALLOW_ORIGIN']);
 
 # Function
+function print_log($mes) {
+  error_log("[".date('Y-m-d H:i:s')."] " . $mes. "\n", 3, $_ENV['LOG_PATH']);
+}
+
 function error($mes) {
   http_response_code(400);
   $array['status']  = 'error';
@@ -56,6 +60,7 @@ case 'POST':
     '"' . $request['desc']  . '",' .
     '"' . $request['tag']   . '",' .
     '"' . $list             . '")' ;
+  print_log('POST: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
   return;
@@ -75,6 +80,7 @@ case 'PUT':
   'tag="'         . $request['tag']   . '",' .
   'list="'        . $list             . '" ' .
   'WHERE id='     . $request['id'];
+  print_log('PUT: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
   return;
@@ -91,6 +97,7 @@ case 'GET':
     }
   }
 
+  print_log('GET: '.$query);
   $result = $mysqli->query($query);
   if ($result) {
     $i = 0;
@@ -120,6 +127,7 @@ case 'GET':
 ## DELETE
 case 'DELETE':
   $query = 'DELETE FROM exam WHERE id=' . $_GET['id'];
+  print_log('DELETE: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
   return;
