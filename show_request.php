@@ -19,7 +19,8 @@ td {
   <h1>要望一覧</h1>
   <table>
   <tr>
-    <th>日時</th>
+    <th>id</th>
+    <th>最終更新</th>
     <th>要望</th>
     <th>解答</th>
   </tr>
@@ -40,7 +41,8 @@ if ($result) {
   $rows = $result->fetch_array();
   while ($row = $result->fetch_assoc()) {
     print '<tr>';
-    print '<td>' . $row['updated_at']   . '</td>';
+    print '<td>' . $row['id']         . '</td>';
+    print '<td>' . $row['updated_at'] . '</td>';
     print '<td>' . $row['body']   . '</td>';
     print '<td>' . $row['answer'] . '</td>';
     print '</tr>';
