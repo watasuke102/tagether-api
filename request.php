@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
   error('not POST');
 }
 $query  = 'INSERT INTO request (body) values ("' . $_GET['body'] . '")';
+error_log("[".date('Y-m-d H:i:s')."] " . $query . "\n", 3, $_ENV['LOG_PATH']);
 $result = $mysqli->query($query);
 http_response_code(200);
 $array['status'] = 'ok';
