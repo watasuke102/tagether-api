@@ -12,11 +12,21 @@ th {
 td {
   padding: 5px 15px;
 }
+a {
+  color: #67a4ff;
+}
 </style>
 <title>要望一覧</title>
 </head>
 <body>
-  <h1>要望一覧</h1>
+  <h2>説明</h2>
+  <p>
+    TAGetherから送られてきた要望一覧を回答付きで表示します<br>
+    荒らしや迷惑な内容は削除します<br>
+    開発状況（ToDo）は<a href="https://0e0.pw/lusM">こちら</a>
+  </p>
+
+  <h2>要望一覧</h2>
   <table>
   <tr>
     <th>id</th>
