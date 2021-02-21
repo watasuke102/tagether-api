@@ -63,6 +63,7 @@ case 'POST':
   print_log('POST: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
+  $mysqli->close();
   return;
 
 ####################
@@ -83,6 +84,7 @@ case 'PUT':
   print_log('PUT: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
+  $mysqli->close();
   return;
 
 ####################
@@ -130,5 +132,6 @@ case 'DELETE':
   print_log('DELETE: '.$query);
   $result = $mysqli->query($query);
   error_check($mysqli->error);
+  $mysqli->close();
   return;
 }
