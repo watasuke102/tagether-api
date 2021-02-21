@@ -6,6 +6,8 @@
 # Email  : <watasuke102@gmail.com>
 # Twitter: @Watasuke102
 # This software is released under the MIT SUSHI-WARE License.
+ini_set('display_errors', "On");
+ini_set('error_reporting', E_ALL);
 require_once __DIR__.'/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
