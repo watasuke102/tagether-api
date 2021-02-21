@@ -42,15 +42,18 @@ http_response_code(200);
 $array['status'] = 'ok';
 print json_encode($array);
 
+// idを取得
+$id = $mysqli->query('select max(id) from request')->fetch_assoc()["max(id)"];
 # Webhookに送信
 $ch = curl_init($_ENV['WEBHOOK_URL']);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt(
   $ch, CURLOPT_POSTFIELDS, 
   '{"avatar_url":"https://watasuke.tk/pic/tagether.png",' .
-  '"embeds":[{"fields":[{"name":"新規要望が投稿されました","value":"' .
-  $_GET['body'] .
-  '"}]}]}'
+  '"embeds":[{"title":"新規要望が投稿されました", "fields":[' .
+  '{"name": "ID",   "value": "' . $id           . '"},' .
+  '{"name": "内容", "value": "' . $_GET['body'] . '"}' .
+  ']}]}'
 );
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   'Content-Type: application/json',
@@ -59,4 +62,5 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HEADER, true);
 $html = curl_exec($ch);
 curl_close($ch);
+$mysqli->close();
 return;
